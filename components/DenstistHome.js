@@ -1,45 +1,55 @@
-import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
-import React from 'react';
-import { useNavigation } from '@react-navigation/native';
-import { supabase } from '../lib/supabase'; // Import Supabase client
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Modal, StatusBar } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
+import WelcomeDentist from './WelcomeDentist';
 import AppointmentCalendar from './AppointmentCalendar';
 import AppointmentRecordHistory from './AppointmentRecordHistory';
 import AdminWidget from './AdminWidget';
 import MonthlyPatients from './MonthlyPatients';
-import WelcomeUser from './WelcomeUser';
 
 const DentistHome = () => {
-  const navigation = useNavigation();
-
-  // Sign-out function
-  const handleSignOut = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      Alert.alert('Error', 'Failed to sign out. Please try again.');
-      console.error('Sign-out error:', error.message);
-    } else {
-      Alert.alert('Signed out', 'You have been signed out successfully.');
-      navigation.replace('LogIn'); // Navigate to LogIn screen
-    }
-    
-  };
+  const [modalVisible, setModalVisible] = useState(false);
 
   return (
     <>
-   <View>
-    
-    </View>  
-    <View style={styles.container}>
+      <StatusBar barStyle="dark-content" backgroundColor="#F8F9FA" />
+      <View style={styles.container}>
+        {/* Header Section */}
+        <View style={styles.headerContainer}>
+          <WelcomeDentist />
+          <TouchableOpacity onPress={() => setModalVisible(true)}>
+            <MaterialIcons name="notifications" size={40} color="#009688" />
+          </TouchableOpacity>
+        </View>
 
-              
-              <AppointmentCalendar/>
-              <AppointmentRecordHistory/>
-              <AdminWidget/>
-              <MonthlyPatients/>
-      
-      
-    </View>
-  </>
+        {/* Main Content */}
+        <AppointmentCalendar />
+        <AppointmentRecordHistory />
+        <AdminWidget />
+        <MonthlyPatients />
+      </View>
+
+      {/* Modal for Notifications */}
+      <Modal
+        visible={modalVisible}
+        animationType="fade"
+        transparent={true}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Notifications</Text>
+            <Text style={styles.noNotificationsText}>No notifications at the moment.</Text>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setModalVisible(false)}
+            >
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+    </>
   );
 };
 
@@ -48,26 +58,56 @@ export default DentistHome;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    padding: 15,
+    paddingTop: StatusBar.currentHeight || 12,
+    backgroundColor: '#e8ecf4',
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+  },
+  modalContainer: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f8f8f8',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
-  title: {
-    fontSize: 24,
+  modalContent: {
+    width: '90%',
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 20,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  modalTitle: {
+    fontSize: 20,
     fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 20,
+    marginBottom: 15,
   },
-  signOutButton: {
-    marginTop: 20,
+  noNotificationsText: {
+    fontSize: 16,
+    color: '#777',
+    textAlign: 'center',
+    marginVertical: 20,
+  },
+  closeButton: {
+    backgroundColor: '#009688',
     paddingVertical: 10,
     paddingHorizontal: 20,
-    backgroundColor: '#009688',
-    borderRadius: 8,
+    borderRadius: 5,
   },
-  signOutButtonText: {
+  closeButtonText: {
     color: '#fff',
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: 'bold',
   },
 });

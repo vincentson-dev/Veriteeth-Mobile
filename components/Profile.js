@@ -252,7 +252,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#e8ecf4',
   },
   loadingContainer: {
     flex: 1,
@@ -309,6 +309,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#333',
     marginTop: 20,
+    marginBottom:15,
   },
   appointmentItem: {
     marginBottom: 10,

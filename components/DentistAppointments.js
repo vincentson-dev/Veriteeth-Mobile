@@ -23,7 +23,9 @@ export default function ConfirmedAppointments() {
       const { data, error } = await supabase
         .from('appointments')
         .select('id, type, appointment_time, first_name, last_name') // Select necessary fields
-        .eq('confirmed_appointments', true);
+        .eq('confirmed_appointments', true)
+        .is('finished_appointments', false) // Exclude completed appointments
+        .is('no_show', false); // Exclude no-show appointments
 
       if (error) throw error;
 
@@ -127,7 +129,7 @@ export default function ConfirmedAppointments() {
       <Text style={styles.title}>Confirmed Appointments</Text>
       {appointments.length === 0 ? (
         <View style={styles.noAppointmentsContainer}>
-          <Text style={styles.noAppointmentsText}>No Confirmed Appointments.</Text>
+          <Text style={styles.noAppointmentsText}>No Appointments.</Text>
         </View>
       ) : (
         <FlatList

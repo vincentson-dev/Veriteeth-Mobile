@@ -254,7 +254,7 @@ const styles = StyleSheet.create({
  
   container: {
     flex: 1,
-    marginTop: 0,
+    
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
@@ -265,6 +265,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#009688',
     marginBottom: 15,
+    
   },
   label: {
     fontSize: 16,
@@ -272,7 +273,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   calendar: {
-    marginBottom: 20,
+    marginBottom: 45,
     width: 370,
   },
   row: {
