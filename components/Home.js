@@ -3,7 +3,7 @@ import {
   View,
   StyleSheet,
   ScrollView,
-  StatusBar,
+  StatusBar,  
   Modal,
   Text,
   TouchableOpacity,
@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   componentContainer: {
-    marginBottom: 10,
+    marginBottom: 5,
   },
   notificationIconContainer: {
     position: 'relative',

@@ -109,13 +109,17 @@ export default function AdminProfile({ navigation }) {
         </View>
       )}
 
+      {/* Sign-out button */}
       <View style={styles.signOutContainer}>
-        <TouchableOpacity style={styles.button} onPress={() => setShowSignOutModal(true)}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => setShowSignOutModal(true)}
+        >
           <Text style={styles.buttonText}>Sign Out</Text>
         </TouchableOpacity>
       </View>
 
-      {/* Sign-Out Confirmation Modal */}
+      {/* Sign-out confirmation modal */}
       <Modal
         visible={showSignOutModal}
         transparent={true}
@@ -165,6 +169,7 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: 'bold',
     color: '#009688',
+    marginTop:30,
     marginBottom: 5,
   },
   emailText: {
@@ -205,7 +210,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   signOutContainer: {
-    marginTop: 20,
+    position: 'absolute',  // Make the sign-out button fixed at the bottom
+    left: 0,
+    right: 0,
+    bottom: 80,  // 80px from the bottom
+    paddingHorizontal: 20,
+    paddingVertical: 10,
   },
   modalOverlay: {
     flex: 1,

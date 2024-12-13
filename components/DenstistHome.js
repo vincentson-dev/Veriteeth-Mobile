@@ -2,6 +2,11 @@ import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { supabase } from '../lib/supabase'; // Import Supabase client
+import AppointmentCalendar from './AppointmentCalendar';
+import AppointmentRecordHistory from './AppointmentRecordHistory';
+import AdminWidget from './AdminWidget';
+import MonthlyPatients from './MonthlyPatients';
+import WelcomeUser from './WelcomeUser';
 
 const DentistHome = () => {
   const navigation = useNavigation();
@@ -16,17 +21,25 @@ const DentistHome = () => {
       Alert.alert('Signed out', 'You have been signed out successfully.');
       navigation.replace('LogIn'); // Navigate to LogIn screen
     }
+    
   };
 
   return (
+    <>
+   <View>
+    
+    </View>  
     <View style={styles.container}>
-      <Text style={styles.title}>Dentist Home</Text>
 
-      {/* Sign-Out Button */}
-      <TouchableOpacity style={styles.signOutButton} onPress={handleSignOut}>
-        <Text style={styles.signOutButtonText}>Sign Out</Text>
-      </TouchableOpacity>
+              
+              <AppointmentCalendar/>
+              <AppointmentRecordHistory/>
+              <AdminWidget/>
+              <MonthlyPatients/>
+      
+      
     </View>
+  </>
   );
 };
 

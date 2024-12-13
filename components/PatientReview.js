@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 20,
+    marginBottom: 15,
     color: '#009688',  // Teal color for the header
     textAlign: 'center',
   },
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
   reviewText: {
     fontSize: 16,
     color: '#333',  // Darker text color for comment
-    marginBottom: 8,  // Space between comment and other content
+    marginBottom: 5,  // Space between comment and other content
   },
   loadingText: {
     fontSize: 18,

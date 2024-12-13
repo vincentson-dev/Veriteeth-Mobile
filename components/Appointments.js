@@ -183,7 +183,7 @@ export default function AppointmentSetting() {
           [formattedDate]: { selected: true, selectedColor: '#009688', selectedTextColor: '#fff' },
         }}
         onDayPress={handleDateSelect}
-        monthFormat={'yyyy MM'}
+        monthFormat={'MMMM'}
         style={styles.calendar}
       />
 
@@ -251,6 +251,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+ 
   container: {
     flex: 1,
     marginTop: 0,

@@ -7,21 +7,17 @@ import {
   Alert,
   TouchableOpacity,
   TextInput,
-  FlatList,
   Modal,
 } from 'react-native';
 import { supabase } from '../lib/supabase';
 
-export default function Profile({ navigation }) {
+export default function DentistProfile({ navigation }) {
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState({ first_name: '', last_name: '', email: '' });
   const [newPassword, setNewPassword] = useState('');
   const [isUpdating, setIsUpdating] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
-  const [appointments, setAppointments] = useState([]);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [selectedAppointment, setSelectedAppointment] = useState(null);
-  const [showSignOutModal, setShowSignOutModal] = useState(false); // State for sign-out confirmation modal
+  const [showSignOutModal, setShowSignOutModal] = useState(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -34,7 +30,6 @@ export default function Profile({ navigation }) {
         }
         const { first_name, last_name, email } = session.user.user_metadata;
         setUserData({ first_name, last_name, email });
-        fetchConfirmedAppointments(email);
       } catch (error) {
         console.error('Error fetching user data:', error);
       } finally {
@@ -43,26 +38,6 @@ export default function Profile({ navigation }) {
     };
     fetchUserData();
   }, []);
-
-  const fetchConfirmedAppointments = async (email) => {
-    try {
-      const { data, error } = await supabase
-        .from('appointments')
-        .select('id, confirmed_appointments, appointment_time, type, finished_appointments')
-        .eq('confirmed_appointments', true)
-        .eq('user_email', email);
-
-      if (error) throw error;
-
-      // Filter out appointments where finished_appointments is true
-      const filteredAppointments = data.filter(appointment => !appointment.finished_appointments);
-
-      setAppointments(filteredAppointments);
-    } catch (error) {
-      Alert.alert('Error', 'Failed to fetch appointments.');
-      console.error('Error fetching appointments:', error);
-    }
-  };
 
   const handleSignOut = async () => {
     const { error } = await supabase.auth.signOut();
@@ -92,20 +67,6 @@ export default function Profile({ navigation }) {
     setIsUpdating(false);
   };
 
-  const toggleSettings = () => {
-    setShowSettings(!showSettings);
-  };
-
-  const formatAppointmentDate = (appointmentTime) => {
-    const date = new Date(appointmentTime);
-    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    const day = daysOfWeek[date.getDay()];
-    const formattedDate = date.toLocaleDateString();
-    const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-    return `${day}, ${formattedDate} at ${formattedTime}`;
-  };
-
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
@@ -121,7 +82,7 @@ export default function Profile({ navigation }) {
       </Text>
       <Text style={styles.emailText}>{userData.email}</Text>
 
-      <TouchableOpacity style={styles.settingsToggle} onPress={toggleSettings}>
+      <TouchableOpacity style={styles.settingsToggle} onPress={() => setShowSettings(!showSettings)}>
         <Text style={styles.settingsToggleText}>
           {showSettings ? 'Hide Account Settings' : 'Show Account Settings'}
         </Text>
@@ -146,34 +107,6 @@ export default function Profile({ navigation }) {
             </Text>
           </TouchableOpacity>
         </View>
-      )}
-
-      <Text style={styles.sectionTitle}>Confirmed Appointments</Text>
-      {appointments.length > 0 ? (
-        <FlatList
-          data={appointments}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              onPress={() => {
-                setSelectedAppointment(item);
-                setModalVisible(true);
-              }}
-            >
-              <View style={styles.appointmentItem}>
-                <Text style={styles.appointmentText}>
-                  <Text style={styles.appointmentType}>{item.type} </Text>
-                  confirmed for{' '}
-                  <Text style={styles.appointmentDetails}>
-                    {formatAppointmentDate(item.appointment_time)}
-                  </Text>
-                </Text>
-              </View>
-            </TouchableOpacity>
-          )}
-        />
-      ) : (
-        <Text style={styles.noAppointmentsText}>No confirmed appointments</Text>
       )}
 
       {/* Sign-out button */}
@@ -216,34 +149,6 @@ export default function Profile({ navigation }) {
           </View>
         </View>
       </Modal>
-
-      {/* Appointment Modal */}
-      {selectedAppointment && (
-        <Modal
-          visible={modalVisible}
-          transparent={true}
-          animationType="fade"
-          onRequestClose={() => setModalVisible(false)}
-        >
-          <View style={styles.modalOverlay}>
-            <View style={styles.simpleModalContainer}>
-              <Text style={styles.modalTitle}>{selectedAppointment.type}</Text>
-              <Text style={styles.modalMessage}>
-                Appointment Date and Time:
-              </Text>
-              <Text style={styles.modalMessage}>
-                {formatAppointmentDate(selectedAppointment.appointment_time)}
-              </Text>
-              <TouchableOpacity
-                style={styles.closeButton}
-                onPress={() => setModalVisible(false)}
-              >
-                <Text style={styles.closeButtonText}>Close</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
-      )}
     </View>
   );
 }
@@ -304,37 +209,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-    marginTop: 20,
-  },
-  appointmentItem: {
-    marginBottom: 10,
-    padding: 15,
-    backgroundColor: '#FFF',
-    borderRadius: 5,
-    elevation: 3,
-  },
-  appointmentText: {
-    fontSize: 16,
-    color: '#333',
-  },
-  appointmentType: {
-    fontWeight: 'bold',
-  },
-  appointmentDetails: {
-    color: '#009688',
-  },
-  noAppointmentsText: {
-    fontSize: 16,
-    marginTop:14,
-    color: '#555',
-    textAlign: 'center',
-  },
   signOutContainer: {
-    position: 'absolute',  // Make the sign out button fixed at the bottom
+    position: 'absolute',  // Make the sign-out button fixed at the bottom
     left: 0,
     right: 0,
     bottom: 80,  // 80px from the bottom
@@ -386,16 +262,5 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 5,
     alignItems: 'center',
-  },
-  closeButton: {
-    backgroundColor: '#009688',
-    padding: 10,
-    borderRadius: 5,
-    marginTop: 15,
-  },
-  closeButtonText: {
-    color: '#FFF',
-    fontSize: 16,
-    fontWeight: 'bold',
   },
 });

@@ -121,13 +121,13 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 30,
     fontWeight: 'bold',
-    marginBottom: 15,
+    marginBottom: 5,
     textAlign: 'center',
     color: '#009688',
   },
   userInfo: {
     fontSize: 16,
-    marginBottom: 10,
+    marginBottom: 5,
     color: '#666',
   },
   textInput: {
@@ -137,17 +137,18 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     borderRadius: 5,
-    marginBottom: 20,
+    marginBottom: 15,
     textAlignVertical: 'top',
     width: '100%',
   },
   buttonContainer: {
     width: '100%',
-    marginTop: 10,
+    marginTop: 5,
     backgroundColor: '#009688',
     paddingVertical: 15,
     borderRadius: 25,
     alignItems: 'center',
+    marginBottom:15,
   },
   buttonText: {
     color: '#fff',

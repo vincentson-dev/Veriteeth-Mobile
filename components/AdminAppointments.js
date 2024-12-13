@@ -56,6 +56,28 @@ export default function AdminAppointments() {
     }
   };
 
+  // Function to handle canceling an appointment
+  const cancelAppointment = async (appointmentId) => {
+    try {
+      const { error } = await supabase
+        .from('appointments')
+        .update({ cancelled_appointments: true, pending_appointments: false })
+        .eq('id', appointmentId);
+
+      if (error) throw error;
+
+      // Remove the canceled appointment from the list of pending appointments
+      setAppointments((prevAppointments) =>
+        prevAppointments.filter((appointment) => appointment.id !== appointmentId)
+      );
+
+      Alert.alert('Success', 'Appointment canceled!');
+    } catch (error) {
+      console.error('Error canceling appointment:', error.message);
+      Alert.alert('Error', 'Failed to cancel the appointment.');
+    }
+  };
+
   const renderAppointment = ({ item, index }) => {
     const isRecent = index === 0;
 
@@ -113,7 +135,7 @@ export default function AdminAppointments() {
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.button, styles.cancelButton]}
-              onPress={() => cancelAppointment(item.id)}
+              onPress={() => cancelAppointment(item.id)} // Updated here
             >
               <Text style={styles.buttonText}>Cancel</Text>
             </TouchableOpacity>

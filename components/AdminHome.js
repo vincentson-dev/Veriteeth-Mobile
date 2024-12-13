@@ -3,7 +3,10 @@ import { View, Text, StyleSheet, TouchableOpacity, Modal, FlatList, StatusBar } 
 import { MaterialIcons } from '@expo/vector-icons';
 import { supabase } from '../lib/supabase';
 import WelcomeUser from './WelcomeUser';
-
+import AdminWidget from './AdminWidget'
+import AppointmentRecordHistory from './AppointmentRecordHistory';
+import AppointmentCalendar from './AppointmentCalendar';
+import MonthlyPatients from './MonthlyPatients';
 export default function AdminHome() {
   const [notifications, setNotifications] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
@@ -125,7 +128,15 @@ export default function AdminHome() {
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.title}>Admin Home</Text>
+        {/* components */}
+
+       
+
+              
+              <AppointmentCalendar/>
+              <AppointmentRecordHistory/>
+              <AdminWidget/>
+              <MonthlyPatients/>
       </View>
 
       {/* Notifications Modal */}
@@ -175,8 +186,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    padding: 16,
-    paddingTop: StatusBar.currentHeight || 16,
+    padding: 15,
+    paddingTop: StatusBar.currentHeight || 12,
     backgroundColor: '#e8ecf4',
   },
   headerContainer: {
